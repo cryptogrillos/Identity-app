@@ -6,8 +6,10 @@ import 'package:flutter_login/widgets.dart';
 import 'transition_route_observer.dart';
 import 'widgets/fade_in.dart';
 import 'constants.dart';
-import 'widgets/animated_numeric_text.dart';
 import 'widgets/round_button.dart';
+import '../challenges/challenges.dart';
+import '../personal_info/personal_info.dart';
+import 'main.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard';
@@ -21,10 +23,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen>
     with SingleTickerProviderStateMixin, TransitionRouteAware {
   Future<bool> _goToLogin(BuildContext context) {
-    return Navigator.of(context)
-        .pushReplacementNamed('/')
-        // we dont want to pop the screen, just replace it completely
-        .then((_) => false);
+    return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
   }
 
   final routeObserver = TransitionRouteObserver<PageRoute?>();
@@ -67,30 +66,17 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   AppBar _buildAppBar(ThemeData theme) {
     final menuBtn = IconButton(
-      color: theme.accentColor,
       icon: const Icon(FontAwesomeIcons.bars),
       onPressed: () {},
     );
     final signOutBtn = IconButton(
       icon: const Icon(FontAwesomeIcons.signOutAlt),
-      color: theme.accentColor,
       onPressed: () => _goToLogin(context),
     );
     final title = Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Hero(
-              tag: Constants.logoTag,
-              child: Image.asset(
-                'assets/images/ecorp.png',
-                filterQuality: FilterQuality.high,
-                height: 30,
-              ),
-            ),
-          ),
           HeroText(
             Constants.appName,
             tag: Constants.titleTag,
@@ -143,29 +129,12 @@ class _DashboardScreenState extends State<DashboardScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '\$',
-                  style: theme.textTheme.headline3!.copyWith(
-                    fontWeight: FontWeight.w300,
-                    // color: accentColor.shade400,
-                  ),
-                ),
-                const SizedBox(width: 5),
-                AnimatedNumericText(
-                  initialValue: 14,
-                  targetValue: 3467.87,
-                  curve: const Interval(0, .5, curve: Curves.easeOut),
-                  controller: _loadingController!,
-                  style: theme.textTheme.headline3!.copyWith(
-                    foreground: Paint()..shader = linearGradient,
-                  ),
-                ),
-              ],
+            Text(
+              'Start',
+              style: theme.textTheme.headline3!.copyWith(
+                fontWeight: FontWeight.w300,
+              ),
             ),
-            Text('Account Balance', style: theme.textTheme.caption),
           ],
         ),
       ),
@@ -187,71 +156,104 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildDashboardGrid() {
+  Widget _buildDashboardGrid(context) {
     const step = 0.04;
     const aniInterval = 0.75;
 
-    return GridView.count(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 32.0,
-        vertical: 20,
-      ),
-      childAspectRatio: .9,
-      // crossAxisSpacing: 5,
-      crossAxisCount: 3,
-      children: [
-        _buildButton(
-          icon: const Icon(FontAwesomeIcons.user),
-          label: 'Profile',
-          interval: const Interval(0, aniInterval),
-        ),
-        _buildButton(
-          icon: Container(
-            // fix icon is not centered like others for some reasons
-            padding: const EdgeInsets.only(left: 16.0),
-            alignment: Alignment.centerLeft,
-            child: const Icon(
-              FontAwesomeIcons.moneyBillAlt,
-              size: 20,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Challenges()),
+                );
+              },
+              child: const Text("Challenges"),
+              style: ElevatedButton.styleFrom(
+                textStyle:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                minimumSize: const Size(100, 100),
+                primary: Colors.green,
+                shadowColor: Colors.grey,
+                elevation: 5,
+                side: BorderSide(
+                    color: Colors.green.shade400,
+                    width: 2,
+                    style: BorderStyle.solid),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                tapTargetSize: MaterialTapTargetSize.padded,
+              ),
             ),
-          ),
-          label: 'Fund Transfer',
-          interval: const Interval(step, aniInterval + step),
+          ],
         ),
-        _buildButton(
-          icon: const Icon(FontAwesomeIcons.handHoldingUsd),
-          label: 'Payment',
-          interval: const Interval(step * 2, aniInterval + step * 2),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PersonalInfo()),
+                );
+              },
+              child: const Text("Personal info"),
+              style: ElevatedButton.styleFrom(
+                textStyle:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                minimumSize: const Size(100, 100),
+                primary: Colors.blue,
+                elevation: 5,
+                side: BorderSide(
+                    color: Colors.blue.shade400,
+                    width: 2,
+                    style: BorderStyle.solid),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                tapTargetSize: MaterialTapTargetSize.padded,
+              ),
+            ),
+          ],
         ),
-        _buildButton(
-          icon: const Icon(FontAwesomeIcons.chartLine),
-          label: 'Report',
-          interval: const Interval(0, aniInterval),
-        ),
-        _buildButton(
-          icon: const Icon(Icons.vpn_key),
-          label: 'Register',
-          interval: const Interval(step, aniInterval + step),
-        ),
-        _buildButton(
-          icon: const Icon(FontAwesomeIcons.history),
-          label: 'History',
-          interval: const Interval(step * 2, aniInterval + step * 2),
-        ),
-        _buildButton(
-          icon: const Icon(FontAwesomeIcons.ellipsisH),
-          label: 'Other',
-          interval: const Interval(0, aniInterval),
-        ),
-        _buildButton(
-          icon: const Icon(FontAwesomeIcons.search, size: 20),
-          label: 'Search',
-          interval: const Interval(step, aniInterval + step),
-        ),
-        _buildButton(
-          icon: const Icon(FontAwesomeIcons.slidersH, size: 20),
-          label: 'Settings',
-          interval: const Interval(step * 2, aniInterval + step * 2),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
+              },
+              child: const Text("Log out"),
+              style: ElevatedButton.styleFrom(
+                textStyle:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                minimumSize: const Size(100, 100),
+                primary: Colors.red,
+                shadowColor: Colors.grey,
+                elevation: 5,
+                side: BorderSide(
+                    color: Colors.redAccent.shade400,
+                    width: 2,
+                    style: BorderStyle.solid),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                tapTargetSize: MaterialTapTargetSize.padded,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -286,7 +288,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       onWillPop: () => _goToLogin(context),
       child: SafeArea(
         child: Scaffold(
-          appBar: _buildAppBar(theme),
+          // appBar: _buildAppBar(theme),
           body: Container(
             width: double.infinity,
             height: double.infinity,
@@ -311,20 +313,16 @@ class _DashboardScreenState extends State<DashboardScreen>
                             tileMode: TileMode.clamp,
                             colors: <Color>[
                               Colors.deepPurpleAccent.shade100,
-                              Colors.deepPurple.shade100,
-                              Colors.deepPurple.shade100,
-                              Colors.deepPurple.shade100,
-                              // Colors.red,
-                              // Colors.yellow,
+                              Colors.orange,
                             ],
                           ).createShader(bounds);
                         },
-                        child: _buildDashboardGrid(),
+                        child: _buildDashboardGrid(context),
                       ),
                     ),
                   ],
                 ),
-                if (!kReleaseMode) _buildDebugButtons(),
+                // if (!kReleaseMode) _buildDebugButtons(),
               ],
             ),
           ),
