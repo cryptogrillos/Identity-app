@@ -1,6 +1,6 @@
-final List<String> personal_info = [
-  'Names',
-  'Last names',
-  'Birthday',
-  'School ID'
-];
+const personalInfo = {
+  'Names': 'John',
+  'Last names': 'Doe',
+  'Birthday': '10/10/10',
+  'School ID': '12345678'
+};

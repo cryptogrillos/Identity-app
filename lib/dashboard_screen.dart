@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_login/theme.dart';
 import 'package:flutter_login/widgets.dart';
-import 'transition_route_observer.dart';
-import 'widgets/fade_in.dart';
-import 'constants.dart';
-import 'widgets/round_button.dart';
-import '../challenges/challenges.dart';
-import '../personal_info/personal_info.dart';
-import 'main.dart';
+import 'login/transition_route_observer.dart';
+import 'login/widgets/fade_in.dart';
+import 'login/constants.dart';
+// import 'login/widgets/round_button.dart';
+import 'challenges/challenge_solver.dart';
+import 'personal_info/personal_info.dart';
+import 'login/main.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard';
@@ -64,53 +64,6 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void didPushAfterTransition() => _loadingController!.forward();
 
-  AppBar _buildAppBar(ThemeData theme) {
-    final menuBtn = IconButton(
-      icon: const Icon(FontAwesomeIcons.bars),
-      onPressed: () {},
-    );
-    final signOutBtn = IconButton(
-      icon: const Icon(FontAwesomeIcons.signOutAlt),
-      onPressed: () => _goToLogin(context),
-    );
-    final title = Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          HeroText(
-            Constants.appName,
-            tag: Constants.titleTag,
-            viewState: ViewState.shrunk,
-            style: LoginThemeHelper.loginTextStyle,
-          ),
-          const SizedBox(width: 20),
-        ],
-      ),
-    );
-
-    return AppBar(
-      leading: FadeIn(
-        controller: _loadingController,
-        offset: .3,
-        curve: headerAniInterval,
-        fadeDirection: FadeDirection.startToEnd,
-        child: menuBtn,
-      ),
-      actions: <Widget>[
-        FadeIn(
-          controller: _loadingController,
-          offset: .3,
-          curve: headerAniInterval,
-          fadeDirection: FadeDirection.endToStart,
-          child: signOutBtn,
-        ),
-      ],
-      title: title,
-      backgroundColor: theme.primaryColor.withOpacity(.1),
-      elevation: 0,
-    );
-  }
-
   Widget _buildHeader(ThemeData theme) {
     final primaryColor =
         Colors.primaries.where((c) => c == theme.primaryColor).first;
@@ -131,9 +84,8 @@ class _DashboardScreenState extends State<DashboardScreen>
           children: <Widget>[
             Text(
               'Start',
-              style: theme.textTheme.headline3!.copyWith(
-                fontWeight: FontWeight.w300,
-              ),
+              style: theme.textTheme.headline3!
+                  .copyWith(fontWeight: FontWeight.w500, color: Colors.black),
             ),
           ],
         ),
@@ -141,25 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildButton(
-      {Widget? icon, String? label, required Interval interval}) {
-    return RoundButton(
-      icon: icon,
-      label: label,
-      loadingController: _loadingController,
-      interval: Interval(
-        interval.begin,
-        interval.end,
-        curve: const ElasticOutCurve(0.42),
-      ),
-      onPressed: () {},
-    );
-  }
-
   Widget _buildDashboardGrid(context) {
-    const step = 0.04;
-    const aniInterval = 0.75;
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -171,14 +105,15 @@ class _DashboardScreenState extends State<DashboardScreen>
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Challenges()),
+                  MaterialPageRoute(
+                      builder: (context) => const ChallengeSolver()),
                 );
               },
               child: const Text("Challenges"),
               style: ElevatedButton.styleFrom(
                 textStyle:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                minimumSize: const Size(100, 100),
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                minimumSize: const Size(200, 100),
                 primary: Colors.green,
                 shadowColor: Colors.grey,
                 elevation: 5,
@@ -208,8 +143,8 @@ class _DashboardScreenState extends State<DashboardScreen>
               child: const Text("Personal info"),
               style: ElevatedButton.styleFrom(
                 textStyle:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                minimumSize: const Size(100, 100),
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                minimumSize: const Size(200, 100),
                 primary: Colors.blue,
                 elevation: 5,
                 side: BorderSide(
@@ -238,8 +173,8 @@ class _DashboardScreenState extends State<DashboardScreen>
               child: const Text("Log out"),
               style: ElevatedButton.styleFrom(
                 textStyle:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                minimumSize: const Size(100, 100),
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                minimumSize: const Size(200, 100),
                 primary: Colors.red,
                 shadowColor: Colors.grey,
                 elevation: 5,
@@ -259,27 +194,6 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildDebugButtons() {
-    const textStyle = TextStyle(fontSize: 12, color: Colors.white);
-
-    return Positioned(
-      bottom: 0,
-      right: 0,
-      child: Row(
-        children: <Widget>[
-          MaterialButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            color: Colors.red,
-            onPressed: () => _loadingController!.value == 0
-                ? _loadingController!.forward()
-                : _loadingController!.reverse(),
-            child: const Text('loading', style: textStyle),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -288,11 +202,10 @@ class _DashboardScreenState extends State<DashboardScreen>
       onWillPop: () => _goToLogin(context),
       child: SafeArea(
         child: Scaffold(
-          // appBar: _buildAppBar(theme),
           body: Container(
             width: double.infinity,
             height: double.infinity,
-            color: theme.primaryColor.withOpacity(.1),
+            color: Colors.white, //theme.primaryColor.withOpacity(.1),
             child: Stack(
               children: <Widget>[
                 Column(
@@ -304,25 +217,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ),
                     Expanded(
                       flex: 8,
-                      child: ShaderMask(
-                        // blendMode: BlendMode.srcOver,
-                        shaderCallback: (Rect bounds) {
-                          return LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            tileMode: TileMode.clamp,
-                            colors: <Color>[
-                              Colors.deepPurpleAccent.shade100,
-                              Colors.orange,
-                            ],
-                          ).createShader(bounds);
-                        },
-                        child: _buildDashboardGrid(context),
-                      ),
+                      child: _buildDashboardGrid(context),
                     ),
                   ],
                 ),
-                // if (!kReleaseMode) _buildDebugButtons(),
               ],
             ),
           ),

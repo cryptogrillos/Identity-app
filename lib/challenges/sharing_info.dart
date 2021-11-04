@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../personal_info/personal_info_list.dart';
+import 'dart:convert';
 import 'qrcode.dart';
 
 void main() {
@@ -30,7 +31,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool myval = true;
+  List<bool>? _isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    _isChecked = List<bool>.filled(personalInfo.length, false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,62 +47,54 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(
           children: <Widget>[
-            Flexible(
+            Expanded(
               child: Center(
                   child: ListView.builder(
                       padding: const EdgeInsets.all(8),
-                      itemCount: personal_info.length,
+                      itemCount: personalInfo.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Row(children: <Widget>[
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'smth: ',
-                            style: TextStyle(fontSize: 17.0),
-                          ),
-                          SizedBox(width: 10),
-                          Checkbox(
-                            value: myval,
-                            onChanged: (myval) {
-                              setState(() {
-                                this.myval = !this.myval;
-                              });
-                            },
-                          ), //Checkbox
-                        ]);
+                        String detailInfo = personalInfo.keys.elementAt(index);
+                        return CheckboxListTile(
+                          title: Text(detailInfo),
+                          value: _isChecked![index],
+                          onChanged: (val) {
+                            setState(
+                              () {
+                                _isChecked![index] = val!;
+                              },
+                            );
+                          },
+                        );
                       })),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Qrcode()),
-                );
-              },
-              child: const Text("Personal info"),
-              style: ElevatedButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                minimumSize: const Size(100, 100),
-                primary: Colors.blue,
-                elevation: 5,
-                side: BorderSide(
-                    color: Colors.blue.shade400,
-                    width: 2,
-                    style: BorderStyle.solid),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+            Flexible(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Qrcode("Data del usuario")),
+                  );
+                },
+                child: const Text("Generate QR"),
+                style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
+                  minimumSize: const Size(100, 100),
+                  primary: Colors.blue,
+                  elevation: 5,
+                  side: BorderSide(
+                      color: Colors.blue.shade400,
+                      width: 2,
+                      style: BorderStyle.solid),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  tapTargetSize: MaterialTapTargetSize.padded,
                 ),
-                tapTargetSize: MaterialTapTargetSize.padded,
               ),
-            ),
+            )
           ],
-        )
-
-        // SizedBox(
-        //   height: 30,
-        // ),
-        );
+        ));
   }
 }

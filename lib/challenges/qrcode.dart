@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import '../login/dashboard_screen.dart';
-
-void main() {
-  runApp(const Qrcode());
-}
+import '../dashboard_screen.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class Qrcode extends StatelessWidget {
-  const Qrcode({Key? key}) : super(key: key);
+  // ignore: use_key_in_widget_constructors
+  const Qrcode(this.mydata);
+  final String mydata;
 
   @override
   Widget build(BuildContext context) {
@@ -15,60 +14,73 @@ class Qrcode extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Qrcode'),
+      home: MyHomePage('Qrcode', mydata),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  // ignore: use_key_in_widget_constructors
+  const MyHomePage(this.title, this.mydat);
   final String title;
+  final String mydat;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() =>
+      // ignore: no_logic_in_create_state
+      _MyHomePageState(title: title, mydat: mydat);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final String title;
+  final String mydat;
+  _MyHomePageState({required this.title, required this.mydat});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Image.asset(
-              'images/download.png',
-              width: 300,
-              height: 300,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const DashboardScreen()),
-                );
-              },
-              child: const Text("Return to home"),
-              style: ElevatedButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                minimumSize: const Size(100, 100),
-                primary: Colors.blue,
-                elevation: 5,
-                side: BorderSide(
-                    color: Colors.blue.shade400,
-                    width: 2,
-                    style: BorderStyle.solid),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: QrImage(
+                    data: mydat,
+                    version: QrVersions.auto,
+                    size: 300.0,
+                  ),
                 ),
-                tapTargetSize: MaterialTapTargetSize.padded,
-              ),
-            ),
-          ]),
-    );
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DashboardScreen()),
+                      );
+                    },
+                    child: const Text("Return to home"),
+                    style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                      minimumSize: const Size(100, 75),
+                      primary: Colors.blue,
+                      elevation: 5,
+                      side: BorderSide(
+                          color: Colors.blue.shade400,
+                          width: 2,
+                          style: BorderStyle.solid),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      tapTargetSize: MaterialTapTargetSize.padded,
+                    ),
+                  ),
+                )
+              ]),
+        ));
   }
 }

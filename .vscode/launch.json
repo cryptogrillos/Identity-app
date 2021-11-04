@@ -7,13 +7,14 @@
         {
             "name": "blockchain_identity",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "lib/login/main.dart"
         },
         {
             "name": "blockchain_identity (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
         }
     ]
 }

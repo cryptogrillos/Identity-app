@@ -38,34 +38,36 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
           child: ListView.builder(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(30),
               itemCount: challenges.length,
               itemBuilder: (BuildContext context, int index) {
-                return ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ChallengeSolver()),
-                    );
-                  },
-                  child: Text('Entry ${challenges[index]}'),
-                  style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                    minimumSize: const Size(100, 100),
-                    primary: Colors.blue,
-                    elevation: 5,
-                    side: BorderSide(
-                        color: Colors.blue.shade400,
-                        width: 2,
-                        style: BorderStyle.solid),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    tapTargetSize: MaterialTapTargetSize.padded,
-                  ),
-                );
+                return Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ChallengeSolver()),
+                        );
+                      },
+                      child: Text(challenges[index]),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                        minimumSize: const Size(50, 75),
+                        primary: Colors.green,
+                        elevation: 5,
+                        side: BorderSide(
+                            color: Colors.green.shade400,
+                            width: 2,
+                            style: BorderStyle.solid),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        tapTargetSize: MaterialTapTargetSize.padded,
+                      ),
+                    ));
               })),
     );
   }

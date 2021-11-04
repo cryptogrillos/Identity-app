@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'sharing_info.dart';
-import '../login/dashboard_screen.dart';
+import '../dashboard_screen.dart';
 
 void main() {
   runApp(const ChallengeSolver());
@@ -39,74 +39,77 @@ class _MyHomePageState extends State<MyHomePage> {
             appBar: AppBar(
               title: Text(widget.title),
             ),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 50),
-                  Text("What bear is best?"),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Answer',
+            body: Center(
+              child: Column(children: <Widget>[
+                SizedBox(height: 50),
+                Text(
+                  "Read QR",
+                  style: TextStyle(fontSize: 30),
+                ),
+                // TextFormField(
+                //   decoration: const InputDecoration(
+                //     hintText: 'Answer',
+                //   ),
+                //   validator: (String? value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please enter some text';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SharingInfo()),
+                    );
+                  },
+                  child: Text('Solve'),
+                  style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold),
+                    minimumSize: const Size(100, 100),
+                    primary: Colors.blue,
+                    elevation: 5,
+                    side: BorderSide(
+                        color: Colors.blue.shade400,
+                        width: 2,
+                        style: BorderStyle.solid),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
+                    tapTargetSize: MaterialTapTargetSize.padded,
                   ),
-                  SizedBox(height: 50),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SharingInfo()),
-                      );
-                    },
-                    child: Text('Solve'),
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                      minimumSize: const Size(100, 100),
-                      primary: Colors.blue,
-                      elevation: 5,
-                      side: BorderSide(
-                          color: Colors.blue.shade400,
-                          width: 2,
-                          style: BorderStyle.solid),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      tapTargetSize: MaterialTapTargetSize.padded,
+                ),
+                SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const DashboardScreen()),
+                    );
+                  },
+                  child: Text('Reject'),
+                  style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold),
+                    minimumSize: const Size(100, 100),
+                    primary: Colors.red,
+                    elevation: 5,
+                    side: BorderSide(
+                        color: Colors.red.shade400,
+                        width: 2,
+                        style: BorderStyle.solid),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
+                    tapTargetSize: MaterialTapTargetSize.padded,
                   ),
-                  SizedBox(height: 50),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DashboardScreen()),
-                      );
-                    },
-                    child: Text('Reject'),
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                      minimumSize: const Size(100, 100),
-                      primary: Colors.red,
-                      elevation: 5,
-                      side: BorderSide(
-                          color: Colors.red.shade400,
-                          width: 2,
-                          style: BorderStyle.solid),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      tapTargetSize: MaterialTapTargetSize.padded,
-                    ),
-                  )
-                ])));
+                )
+              ]),
+            )));
   }
 }
